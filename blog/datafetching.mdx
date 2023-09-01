@@ -1,0 +1,52 @@
+# Data Fetching, Dynamic Routes & Metadata
+
+## Metadata
+
+ตัวอย่างโค้ดของการใช้ Metadata
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Page",
+  description: "This is about page of demo Next.js",
+};
+
+export default function About() {
+  // throw new Error("Not today!");
+  return (
+    <div>
+      <div>This is an About page</div>
+    </div>
+  );
+
+}
+
+## Data Fetching
+
+ในการ fetch data มี 4 แนวทาง คือ
+
+1. On the server ด้วยคำสั่ง fetch
+2. On the server ด้วย libraries ของ 3rd-party
+3. On the client ผ่าน Routes Handler
+4. On teh client ด้วย libraries ของ 3rd-party
+
+### 1. On the server ด้วยคำสั่ง fetch
+
+์Next.js ได้ทำการปรับปรุงจาก fetch ดั้งเดิมของ Web API เพื่อให้เราสามารถปรับแต่ง catching และ revalidatin ได้สำหรับการ request แต่ละครั้งบน server
+ในส่วนของ React ได้ทำการปรับปรุง fetch ให้ memorize fetch request อัตโนมัติ เมื่อมีการ render React component tree
+
+เราสามารถใช้ fetch กับ async/await บน Server Component ใน Route Handler และ ใน Server Actions ได้
+
+ในส่วนนี้เราสามารถทำสิ่งเหล่านี้ได้ คือ
+
+1. Fetch data บน server โดยการใช้ Server Components
+2. Fetch data พร้อมกันได้หลายอันเพื่อลด waterfalls และ loading times
+3. สำหรับ Layout and Pages ณ ตำแหน่งที่ใช้มัน Next.js จะ dedupe in tree อัตโนมัติ
+4. ใช้สำหรับ Loading UI, Streaming และ Suspense เพื่อทำ progressive render และแสดงผลในระหว่างการ loade ข้อมูล
+
+ตัวอย่างโค้ด ในการ fetch
+export default async function getAllUsers() {
+const res = await fetch("https://jsonplaceholder.typicode.com/users");
+if (!res.ok) throw new Error("Failed to fetch data");
+return res.json;
+}
